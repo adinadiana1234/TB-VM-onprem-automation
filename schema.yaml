@@ -1,0 +1,85 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+title: "Deploy Thingsboard on a compute instance"
+stackDescription: "Deploy Thingsboard on a compute instance"
+schemaVersion: 1.1.0
+version: "20190404"
+locale: "en"
+
+variableGroups:
+- title: General Configuration
+  visible: false
+  variables:
+  - tenancy_ocid
+  - region
+  
+  
+- title: Required Configuration
+  visible: true  
+  variables:
+  - compartment_ocid
+  - vcn_id
+  - subnet_id
+  - vm_display_name
+  - ssh_public_key
+  - ad
+variables:
+  
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    visibile: true
+    title: "Compartment"
+    description: "Choose compartment where you want to deploy the VM"
+
+  vcn_id:
+    type: oci:core:vcn:id
+    title: "VCN"
+    description: "The VCN where the compute instance is deployed"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+    required: true
+
+  subnet_id:
+    type: oci:core:subnet:id
+    title: "Subnet"
+    description: "The Subnet where the compute is deployed"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+      vcnId: ${vcn_id}
+    required: true
+
+  vm_display_name:
+    type: string
+    required: true
+    visibile: true
+    title: "vm display name"
+    description: "VM display name"
+
+  ssh_public_key:
+    type: oci:core:ssh:publickey
+    title: "Public SSH Key"
+    description: "Choose the public SSH Key to be uploaded into compute instances."
+    required: true
+
+  ad:
+    type: oci:identity:availabilitydomain:name
+    title: "availability domain"
+    description: "Choose availability domain"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+    required: true
+
+  postgres_password:
+    type: string
+    required: true
+    visibile: true
+    title: "PostgreSQL password"
+    description: "PostgreSQL password"
+  
+  
+  
+
+
+  
